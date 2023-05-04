@@ -162,17 +162,11 @@ class EventSource<T extends string> {
 	}
 
 	removeMany(handlers: Array<SSEEventHandler>) {
-		for (const handler of handlers) {
-			this.subscriptions.get(handler)?.remove();
-			this.subscriptions.delete(handler);
-		}
+		for (const handler of handlers) this.remove(handler);
 	}
 
 	flushAllListeners() {
-		for (const subscription of this.subscriptions.values())
-			subscription.remove();
-
-		this.subscriptions = new Map();
+		for (const handler of this.subscriptions.keys()) this.remove(handler);
 	}
 
 	close() {
