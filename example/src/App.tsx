@@ -2,60 +2,57 @@ import * as React from 'react';
 import EventSource, { RetryError, SSEMessage } from 'react-native-oksse';
 
 export default function App() {
-  React.useEffect(() => {
-    const eventSource = new EventSource(
-      '<url>',
-      {
-        headers: { Authorization: '<token>' },
-        query: { topic: '<topic>' },
-      }
-    );
+	React.useEffect(() => {
+		const eventSource = new EventSource('<url>', {
+			headers: { Authorization: '<token>' },
+			query: { topic: '<topic>' },
+		});
 
-    const locationFeedHandler = (message: SSEMessage) => {
-      console.log({ LOCATION_FEED: message });
-    };
+		const locationFeedHandler = (message: SSEMessage) => {
+			console.log({ LOCATION_FEED: message });
+		};
 
-    const onMessageHandler = (message: SSEMessage) => {
-      console.log({ message });
-    };
+		const onMessageHandler = (message: SSEMessage) => {
+			console.log({ message });
+		};
 
-    const onOpenHandler = () => {
-      console.log({ open: true });
-    };
+		const onOpenHandler = () => {
+			console.log({ open: true });
+		};
 
-    const onClosedHandler = () => {
-      console.log({ closed: true });
-    };
+		const onClosedHandler = () => {
+			console.log({ closed: true });
+		};
 
-    const onRetryErrorHandler = (
-      err: Error | null,
-      response: RetryError['response'] | null
-    ) => {
-      console.log({ retriedBut: { err, response } });
-    };
+		const onRetryErrorHandler = (
+			err: Error | null,
+			response: RetryError['response'] | null
+		) => {
+			console.log({ retriedBut: { err, response } });
+		};
 
-    eventSource.addEventListener('LOCATION_FEED', locationFeedHandler);
+		eventSource.addEventListener('LOCATION_FEED', locationFeedHandler);
 
-    eventSource.onmessage = onMessageHandler;
+		eventSource.onmessage = onMessageHandler;
 
-    eventSource.onopen = onOpenHandler;
+		eventSource.onopen = onOpenHandler;
 
-    eventSource.onclosed = onClosedHandler;
+		eventSource.onclosed = onClosedHandler;
 
-    eventSource.onretryerror = onRetryErrorHandler;
+		eventSource.onretryerror = onRetryErrorHandler;
 
-    return () => {
-      eventSource.removeMany([
-        locationFeedHandler,
-        onMessageHandler,
-        onOpenHandler,
-        onClosedHandler,
-        onRetryErrorHandler,
-      ]);
+		return () => {
+			eventSource.removeMany([
+				locationFeedHandler,
+				onMessageHandler,
+				onOpenHandler,
+				onClosedHandler,
+				onRetryErrorHandler,
+			]);
 
-      eventSource.close();
-    };
-  }, []);
+			eventSource.close();
+		};
+	}, []);
 
-  return (null);
+	return null;
 }
