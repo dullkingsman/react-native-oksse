@@ -1,31 +1,61 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-oksse';
+import EventSource, { RetryError, SSEMessage } from 'react-native-oksse';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    const eventSource = new EventSource(
+      '<url>',
+      {
+        headers: { Authorization: '<token>' },
+        query: { topic: '<topic>' },
+      }
+    );
+
+    const locationFeedHandler = (message: SSEMessage) => {
+      console.log({ LOCATION_FEED: message });
+    };
+
+    const onMessageHandler = (message: SSEMessage) => {
+      console.log({ message });
+    };
+
+    const onOpenHandler = () => {
+      console.log({ open: true });
+    };
+
+    const onClosedHandler = () => {
+      console.log({ closed: true });
+    };
+
+    const onRetryErrorHandler = (
+      err: Error | null,
+      response: RetryError['response'] | null
+    ) => {
+      console.log({ retriedBut: { err, response } });
+    };
+
+    eventSource.addEventListener('LOCATION_FEED', locationFeedHandler);
+
+    eventSource.onmessage = onMessageHandler;
+
+    eventSource.onopen = onOpenHandler;
+
+    eventSource.onclosed = onClosedHandler;
+
+    eventSource.onretryerror = onRetryErrorHandler;
+
+    return () => {
+      eventSource.removeMany([
+        locationFeedHandler,
+        onMessageHandler,
+        onOpenHandler,
+        onClosedHandler,
+        onRetryErrorHandler,
+      ]);
+
+      eventSource.close();
+    };
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
-  );
+  return (null);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});

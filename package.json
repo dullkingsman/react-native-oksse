@@ -1,7 +1,7 @@
 {
   "name": "react-native-oksse",
   "version": "0.1.0",
-  "description": "test",
+  "description": "A wrapper around the oksse android package.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -37,9 +37,11 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
   },
   "keywords": [
+    "android",
     "react-native",
-    "ios",
-    "android"
+    "server-sent-events",
+    "sse",
+    "event-source"
   ],
   "repository": "https://github.com/dullkingsman/react-native-oksse",
   "author": "Daniel Tsegaw <dullkingsman@gmail.com> (https://github.com/dullkingsman)",
@@ -83,7 +85,6 @@
   "engines": {
     "node": ">= 16.0.0"
   },
-  "packageManager": "^yarn@1.22.15",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
@@ -127,7 +128,7 @@
           "singleQuote": true,
           "tabWidth": 2,
           "trailingComma": "es5",
-          "useTabs": false
+          "useTabs": true
         }
       ]
     }
@@ -141,7 +142,7 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "es5",
-    "useTabs": false
+    "useTabs": true
   },
   "react-native-builder-bob": {
     "source": "src",
