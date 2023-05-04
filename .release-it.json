@@ -1,0 +1,16 @@
+{
+  "git": {
+    "requireBranch": "master",
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}"
+  },
+  "hooks": {
+    "after:bump": "npx auto-changelog -p"
+  },
+  "github": {
+    "release": true
+  },
+  "npm": {
+    "release": true
+  }
+}
