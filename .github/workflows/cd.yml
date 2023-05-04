@@ -13,21 +13,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn prepack
+
       - name: Git configuration
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions"
 
       - name: NPM configuration
-        run: echo "//registry.npmjs.org/:_authToken $NPM_TOKEN" >> .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build package
-        run: yarn prepack
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPMJS_ACCESS_TOKEN }}
 
       - name: Publish package
         run: yarn release --ci --increment ${{ github.event.inputs.release-type }}
